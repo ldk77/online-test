@@ -38,7 +38,18 @@
 			, #{teacherName}
 		)
 	
-	</insert>	
+	</insert>
+	
+	<select id = "lastPage"
+		resultType="int"
+		parameterType="java.lang.String">
+		SELECT COUNT(*) FROM teacher 
+		<where>
+			<if test="searchWord != null || searchWord !=''">
+				teacher_name like CONCAT('%',#{searchWord},'%')
+			</if>
+		</where>	
+	</select>	
 	
 	<select id="selectTeacherList" 
 		resultType="goodee.gdj58.online.vo.Teacher"
@@ -49,6 +60,11 @@
 			, teacher_id teacherId
 			, teacher_name teacherName
 		FROM teacher
+		<where>
+			<if test="searchWord != null || searchWord !=''">
+				teacher_name like CONCAT('%',#{searchWord},'%')
+			</if>
+		</where>
 		ORDER BY teacher_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}	
 	</select>

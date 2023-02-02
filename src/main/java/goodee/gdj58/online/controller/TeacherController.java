@@ -26,12 +26,7 @@ public class TeacherController {
 	
 	// pw수정 폼
 	@GetMapping("/teacher/modifyTeacherPw")
-	public String modifyTeacherPw(HttpSession session) {
-		//로그인 후 호출 가능
-		Teacher loginTeacher = (Teacher)session.getAttribute("loginTeacher");
-		if(loginTeacher == null) {
-			return "redirect:/teacher/loginTeacher";
-		}
+	public String modifyTeacherPw() {
 		return "teacher/modifyTeacherPw";
 	}
 	// pw수정 액션 
@@ -41,16 +36,13 @@ public class TeacherController {
 								, @RequestParam(value="newPw",required = true) String newPw) {
 		//로그인 후 호출 가능
 		Teacher loginTeacher = (Teacher)session.getAttribute("loginTeacher");
-		if(loginTeacher == null) {
-			return "redirect:/teacher/loginTeacher";
-		}
 		
 		teacherService.updateTeacherPw(loginTeacher.getTeacherNo(), oldPw, newPw);
 		
-		return "redirect:/teacher/teacherList";
+		return "redirect:/employee/teacherList";
 	}
 	//로그인 
-	@GetMapping("/teacher/loginTeacher")
+	@GetMapping("/loginTeacher")
 	public String loginTeacher(HttpSession session) {
 		//이미 로그인 중이라면 redirect:/employee/empList
 		Teacher loginTeacher = (Teacher)session.getAttribute("loginTeacher");
@@ -59,7 +51,7 @@ public class TeacherController {
 		}
 		return "teacher/loginTeacher";
 	}
-	@PostMapping("/teacher/loginTeacher")
+	@PostMapping("/loginTeacher")
 	public String loginTeacher(HttpSession session, Teacher teacher) {
 		Teacher resultTeacher = teacherService.login(teacher);
 		if(resultTeacher == null) { //로그인 실패
@@ -76,23 +68,19 @@ public class TeacherController {
 	}
 	
 	//삭제 
-	@GetMapping("teacher/removeTeacher")
-	public String removeTeacher(HttpSession session ,@RequestParam("teacherNo") int teacherNo) {
-
-
+	@GetMapping("employee/removeTeacher")
+	public String removeTeacher(@RequestParam("teacherNo") int teacherNo) {
 		teacherService.removeTeacher(teacherNo);
-		return "redirect:/teacher/teacherList";
+		return "redirect:/employee/teacherList";
 	}
 	
 	//입력
-	@GetMapping("teacher/addTeacher")
-	public String addTeacher(HttpSession session) {
-
-
-		return "teacher/addTeacher";
+	@GetMapping("employee/addTeacher")
+	public String addTeacher() {
+		return "employee/addTeacher";
 	}
-	@PostMapping("/teacher/addTeacher")
-	public String addTeacher(HttpSession session,Model model,Teacher teacher) {
+	@PostMapping("/employee/addTeacher")
+	public String addTeacher(Model model,Teacher teacher) {
 
 		
 		String idCheck = idService.getIdCheck(teacher.getTeacherId());
@@ -103,24 +91,34 @@ public class TeacherController {
 		
 		int row = teacherService.addTeacher(teacher);
 		// row == 1 이면 입력성공
-		return "redirect:/teacher/teacherList"; 
+		return "redirect:/employee/teacherList"; 
 	}
 	
 	// 리스트 
-	@GetMapping("/teacher/teacherList")
-	public String teacherList(HttpSession session, Model model
+	@GetMapping("/employee/teacherList")
+	public String teacherList(Model model
 			, @RequestParam(value="currentPage", defaultValue = "1") int currentPage
-			, @RequestParam(value="rowPerPage", defaultValue = "10") int rowPerPage) {
+			, @RequestParam(value="rowPerPage", defaultValue = "10") int rowPerPage
+			, @RequestParam(value="searchWord", defaultValue = "") String searchWord) {
 			// int currentPage = request.getParameter("currentPage");
-		//사원만 볼수있음
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
+		int lastPage = (int)Math.ceil((double)teacherService.lastPage(searchWord)/(double)rowPerPage);
+		int startPage = (currentPage/rowPerPage)*10 +1;
+		int endPage = (currentPage/rowPerPage)*10 + 10;
+		if(endPage > lastPage) {
+			endPage = lastPage;
 		}
-			
-		List<Teacher> list = teacherService.getTeacherList(currentPage, rowPerPage);
+		if(lastPage<1) {
+			lastPage= currentPage;
+		}
+					
+		List<Teacher> list = teacherService.getTeacherList(currentPage, rowPerPage, searchWord);
 		model.addAttribute("list", list);
 		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("searchWord", searchWord);
+		model.addAttribute("lastPage", lastPage);
+		
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
 		return "teacher/teacherList";
 		
 	}

@@ -29,9 +29,6 @@ public class StudentController {
 	public String modifyStudentPw(HttpSession session) {
 		//로그인 후 호출 가능
 		Student loginStudent = (Student)session.getAttribute("loginStudent");
-		if(loginStudent == null) {
-			return "redirect:/student/loginStudent";
-		}
 		return "student/modifyStudentPw";
 	}
 	// pw수정 액션 
@@ -41,31 +38,20 @@ public class StudentController {
 								, @RequestParam(value="newPw",required = true) String newPw) {
 		//로그인 후 호출 가능
 		Student loginStudent = (Student)session.getAttribute("loginStudent");
-		if(loginStudent == null) {
-			return "redirect:/student/loginStudent";
-		}	
-
 		
 		studentService.updateStudentPw(loginStudent.getStudentNo(), oldPw, newPw);
 		
-		return "redirect:/student/studentList";
+		return "redirect:/employee/studentList";
 	}
 	//로그인 
-	@GetMapping("/student/loginStudent")
-	public String loginStudent(HttpSession session) {
-		//이미 로그인 중이라면 redirect:/employee/empList
-		Student loginStudent = (Student)session.getAttribute("loginStudent");
-		if(loginStudent != null) {
-			return "redirect:/student/modifyStudentPw";
-		}
+	@GetMapping("/loginStudent")
+	public String loginStudent() {
 		return "student/loginStudent";
 	}
-	@PostMapping("/student/loginStudent")
+	@PostMapping("/loginStudent")
 	public String loginStudent(HttpSession session, Student student) {
 		Student resultStudent = studentService.login(student);
-		if(resultStudent == null) { //로그인 실패
-			return "redirect:/student/loginStudent";
-		} 
+		
 		session.setAttribute("loginStudent", resultStudent);
 		return "redirect:/student/modifyStudentPw";
 	}
@@ -77,51 +63,63 @@ public class StudentController {
 	}
 	
 	//삭제 
-	@GetMapping("student/removeStudent")
+	@GetMapping("employee/removeStudent")
 	public String removeStudent(HttpSession session ,@RequestParam("studentNo") int studentNo) {
 
 
 		studentService.removeStudent(studentNo);
-		return "redirect:/student/studentList";
+		return "redirect:/employee/studentList";
 	}
 	
 	//입력
-	@GetMapping("student/addStudent")
-	public String addStudent(HttpSession session) {
+	@GetMapping("employee/addStudent")
+	public String addStudent() {
 
-
-		return "student/addStudent";
+		return "employee/addStudent";
 	}
-	@PostMapping("/student/addStudent")
-	public String addStudent(HttpSession session,Model model,Student student) {
+	@PostMapping("employee/addStudent")
+	public String addStudent(Model model,Student student) {
 
 		
 		String idCheck = idService.getIdCheck(student.getStudentId());
 		if(idCheck != null) {
 			model.addAttribute("errorMsg", "중복된Id");
-			return "student/addStudent";
+			return "employee/addStudent";
 		}
 		
 		int row = studentService.addStudent(student);
 		// row == 1 이면 입력성공
-		return "redirect:/student/studentList"; 
+		return "redirect:/employee/studentList"; 
 	}
 	
 	// 리스트 
-	@GetMapping("/student/studentList")
+	@GetMapping("employee/studentList")
 	public String studentList(HttpSession session, Model model
 			, @RequestParam(value="currentPage", defaultValue = "1") int currentPage
-			, @RequestParam(value="rowPerPage", defaultValue = "10") int rowPerPage) {
+			, @RequestParam(value="rowPerPage", defaultValue = "10") int rowPerPage
+			, @RequestParam(value="searchWord", defaultValue = "") String searchWord) {
 			// int currentPage = request.getParameter("currentPage");
 		//사원만 볼수있음
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
+		int lastPage = (int)Math.ceil((double)studentService.lastPage(searchWord)/(double)rowPerPage);
+		int startPage = (currentPage/rowPerPage)*10 +1;
+		int endPage = (currentPage/rowPerPage)*10 + 10;
+		if(endPage > lastPage) {
+			endPage = lastPage;
 		}
+		if(lastPage<1) {
+			lastPage= currentPage;
+		}
+	
+					
 		
-		List<Student> list = studentService.getStudentList(currentPage, rowPerPage);
+		List<Student> list = studentService.getStudentList(currentPage, rowPerPage, searchWord);
 		model.addAttribute("list", list);
 		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("searchWord", searchWord);
+		model.addAttribute("lastPage", lastPage);
+		
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
 		return "student/studentList";
 		
 	}

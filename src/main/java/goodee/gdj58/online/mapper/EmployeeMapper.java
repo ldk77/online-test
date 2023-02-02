@@ -10,6 +10,7 @@ import goodee.gdj58.online.vo.Employee;
 
 @Mapper
 public interface EmployeeMapper {
+	int lastPage(String searchWord);
 	int updateEmployeePw(Map<String, Object> paramMap);
 	Employee login(Employee employee);
 	int deleteEmployee(int empNo);

@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import goodee.gdj58.online.service.EmployeeService;
 import goodee.gdj58.online.service.IdService;
 import goodee.gdj58.online.vo.Employee;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 public class EmployeeController {
 	@Autowired EmployeeService employeeService;
@@ -25,9 +27,6 @@ public class EmployeeController {
 	public String modifyEmpPw(HttpSession session) {
 		//로그인 후 호출 가능
 		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
-		}
 		return "employee/modifyEmpPw";
 	}
 	// pw수정 액션 
@@ -37,30 +36,21 @@ public class EmployeeController {
 								, @RequestParam(value="newPw",required = true) String newPw) {
 		//로그인 후 호출 가능
 		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
-		}
 		
 		employeeService.updateEmployeePw(loginEmp.getEmpNo(), oldPw, newPw);
 		
 		return "redirect:/employee/empList";
 	}
-	//로그인 
-	@GetMapping("/employee/loginEmp")
-	public String loginEmp(HttpSession session) {
-		//이미 로그인 중이라면 redirect:/employee/empList
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp != null) {
-			return "redirect:/employee/empList";
-		}
+	//로그인 폼
+	@GetMapping("/loginEmp")
+	public String loginEmp() {
 		return "employee/loginEmp";
 	}
-	@PostMapping("/employee/loginEmp")
+	//로그인 액션
+	@PostMapping("/loginEmp")
 	public String loginEmp(HttpSession session, Employee employee) {
 		Employee resultEmp = employeeService.login(employee);
-		if(resultEmp == null) { //로그인 실패
-			return "redirect:/employee/loginEmp";
-		} 
+	
 		session.setAttribute("loginEmp", resultEmp);
 		return "redirect:/employee/empList";
 	}
@@ -73,11 +63,7 @@ public class EmployeeController {
 	
 	//삭제 
 	@GetMapping("employee/removeEmp")
-	public String removeEmp(HttpSession session ,@RequestParam("empNo") int empNo) {
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
-		}
+	public String removeEmp(@RequestParam("empNo") int empNo) {
 
 		employeeService.removeEmployee(empNo);
 		return "redirect:/employee/empList";
@@ -85,21 +71,11 @@ public class EmployeeController {
 	
 	//입력
 	@GetMapping("employee/addEmp")
-	public String addEmp(HttpSession session) {
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
-		}
-
+	public String addEmp() {
 		return "employee/addEmp";
 	}
 	@PostMapping("/employee/addEmp")
-	public String addEmp(HttpSession session,Model model,Employee employee) {
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
-		}
-		
+	public String addEmp(Model model,Employee employee) {
 		String idCheck = idService.getIdCheck(employee.getEmpId());
 		if(idCheck != null) {
 			model.addAttribute("errorMsg", "중복된Id");
@@ -113,18 +89,29 @@ public class EmployeeController {
 	
 	// 리스트 
 	@GetMapping("/employee/empList")
-	public String empList(HttpSession session, Model model
+	public String empList(Model model
 			, @RequestParam(value="currentPage", defaultValue = "1") int currentPage
-			, @RequestParam(value="rowPerPage", defaultValue = "10") int rowPerPage) {
-			// int currentPage = request.getParameter("currentPage");
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
+			, @RequestParam(value="rowPerPage", defaultValue = "10") int rowPerPage
+			, @RequestParam(value="searchWord", defaultValue = "") String searchWord) {
+			// int currentPage = request.getParameter("currentPage");		
+		int lastPage = (int)Math.ceil((double)employeeService.lastPage(searchWord)/(double)rowPerPage);
+		int startPage = (currentPage/rowPerPage)*10 +1;
+		int endPage = (currentPage/rowPerPage)*10 + 10;
+		if(endPage > lastPage) {
+			endPage = lastPage;
+		}
+		if(lastPage<1) {
+			lastPage= currentPage;
 		}
 		
-		List<Employee> list = employeeService.getEmployeeList(currentPage, rowPerPage);
+		List<Employee> list = employeeService.getEmployeeList(currentPage, rowPerPage, searchWord);
 		model.addAttribute("list", list);
 		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("searchWord", searchWord);
+		model.addAttribute("lastPage", lastPage);
+		
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
 		return "employee/empList";
 		
 	}

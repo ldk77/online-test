@@ -42,11 +42,16 @@ public class StudentService {
 		return studentMapper.insertStudent(student);
 	}
 	
-	public List<Student> getStudentList(int currentPage, int rowPerPage){
+	public double lastPage(String searchWord) {
+		return studentMapper.lastPage(searchWord);
+	}
+	
+	public List<Student> getStudentList(int currentPage, int rowPerPage, String searchWord){
 		int beginRow = (currentPage-1)*rowPerPage;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("beginRow", beginRow);
 		paramMap.put("rowPerPage", rowPerPage);
+		paramMap.put("searchWord", searchWord);
 		return studentMapper.selectStudentList(paramMap);
 	}
 

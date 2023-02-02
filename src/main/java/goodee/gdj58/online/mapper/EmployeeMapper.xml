@@ -39,6 +39,17 @@
 		)
 	
 	</insert>	
+	<select id = "lastPage"
+		resultType="int"
+		parameterType="java.lang.String">
+		SELECT COUNT(*) FROM employee 
+		<where>
+			<if test="searchWord != null || searchWord !=''">
+				emp_name like CONCAT('%',#{searchWord},'%')
+			</if>
+		</where>	
+	</select>
+	
 	
 	<select id="selectEmployeeList" 
 		resultType="goodee.gdj58.online.vo.Employee"
@@ -49,6 +60,11 @@
 			, emp_id empId
 			, emp_name empName
 		FROM employee
+		<where>
+			<if test="searchWord != null || searchWord !=''">
+				emp_name like CONCAT('%',#{searchWord},'%')
+			</if>
+		</where>
 		ORDER BY emp_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}	
 	</select>
