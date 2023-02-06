@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="goodee.gdj58.online.mapper.TeacherMapper">
 	
+	<!-- 보기입력 -->
 	<insert id="insertExample" parameterType="goodee.gdj58.online.vo.Example">
 		INSERT INTO example (
 			question_no
@@ -14,6 +15,7 @@
 		)
 	</insert>	
 
+	<!-- 문제입력 -->
 	<insert id="insertQuestion" parameterType="goodee.gdj58.online.vo.Question">
 		INSERT INTO question (
 			test_no
@@ -21,11 +23,12 @@
 			, question_title
 		) VALUES (
 			#{testNo}
-			, #{testTitle}
-			, #{testDate}
+			, #{questionIdx}
+			, #{questionTitle}
 		)
 	</insert>	
 	
+	<!-- 시험지수정 -->
 	<update id="updateTest"
 		parameterType="java.util.Map">
 		UPDATE test
@@ -33,6 +36,7 @@
 		WHERE test_no = #{testNo}
 	</update>
 	
+	<!-- 시험지입력 -->
 	<insert id="insertTest" parameterType="goodee.gdj58.online.vo.Test">
 		INSERT INTO test (
 			test_title
@@ -42,7 +46,8 @@
 			, #{testDate}
 		)
 	</insert>	
-
+	
+	<!-- 강사비밀번호수정 -->
 	<update id="updateTeacherPw"
 		parameterType="java.util.Map">
 		UPDATE teacher
@@ -51,6 +56,8 @@
 	
 	</update>
 	
+	
+	<!-- 로그인 -->
 	<select id="login" 
 		parameterType="goodee.gdj58.online.vo.Teacher"
 		resultType="goodee.gdj58.online.vo.Teacher">
@@ -62,7 +69,7 @@
 		FROM teacher
 		WHERE teacher_id = #{teacherId} AND teacher_pw = PASSWORD(#{teacherPw})
 	</select>
-
+	
 	<delete id="deleteTeacher" parameterType="int">
 		DELETE FROM teacher
 		WHERE teacher_no = #{teacherNo}

@@ -11,20 +11,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import goodee.gdj58.online.service.TestService;
 import goodee.gdj58.online.vo.Test;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 public class TestController {
 	@Autowired TestService testService;
 	// Test 리스트 출력 
 	@GetMapping("/test/testOne")
-	public String test(Model model
-			, @RequestParam(value="testNo") int testNo) {
-		List<Map<String, Object>> list = testService.getQuestionOne(testNo);
+	public String testOne(Model model
+							, @RequestParam(value="testNo") int testNo) {
+		List<Map<String,Object>> list = testService.getExampleList(testNo);
+		Test thisTest = testService.testOne(testNo);
+		int ttlQstCnt = list.size() / 4;
+		int lastQuestion = testService.getLastQuestion();
+	
 		model.addAttribute("list", list);
-
-		
+		model.addAttribute("ttlQstCnt", ttlQstCnt);
+		model.addAttribute("thisTest", thisTest);
+		model.addAttribute("lastQuestion", lastQuestion);
 		return "test/testOne";
-		
 	}
 	
 	

@@ -1,26 +1,51 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title></title>
+
+
 </head>
 <body>
-	<c:set var="idx" value="${t.questionIdx}"/>
-		<c:forEach var="t" items="${list}">
-			<table>			
-				<c:set var="curdate" value="${t.questionIdx}"/>
-				<c:if test="${curdate != idx}">
-				<tr>
-					<td>${t.questionIdx}. ${t.questionTitle}</td>
-				</tr>
-				</c:if>	
-				<tr>
-					<td>${t.exampleIdx}.${t.exampleTitle}</td>
-				</tr>				
-			</table>		
+	<h1>${thisTest.testTitle}</h1>
+	<p>${thisTest.testDate}</p>
+	<hr>
+	<div>
+		<c:forEach var="q" items="${list}">
+			<div>
+				<!-- 문제 -->
+				<c:if test="${q.exampleIdx == 1}">
+					<div style="font-weight:bold;">
+						${q.questionIdx}. ${q.questionTitle}
+					</div>	
+				</c:if>
+				<br>
+				<!-- 선택지 -->
+				<c:if test="${q.exampleIdx == 1}">
+					<div>
+						&nbsp;1. ${q.exampleTitle}
+					</div>
+				</c:if>
+				<c:if test="${q.exampleIdx == 2}">
+					<div>
+						&nbsp;2. ${q.exampleTitle}
+					</div>
+				</c:if>
+				<c:if test="${q.exampleIdx == 3}">
+					<div>
+						&nbsp;3. ${q.exampleTitle}
+					</div>
+				</c:if>
+				<c:if test="${q.exampleIdx == 4}">
+					<div>
+						&nbsp;4. ${q.exampleTitle}
+					</div>
+					<br>
+				</c:if>
+			</div>
 		</c:forEach>
-	<c:set var="idx" target="idx" value="${t.questionIdx}"/>
+	</div>
 </body>
 </html>

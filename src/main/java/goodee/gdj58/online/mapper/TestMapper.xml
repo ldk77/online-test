@@ -2,15 +2,53 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="goodee.gdj58.online.mapper.TestMapper">
 	
-	<select id="selectQuestionOne" parameterType="int" resultType="java.util.Map">
+	<!-- 문제 보기출력 -->
+	<select id="seletExampleList" parameterType="int" resultType="java.util.Map">
 		SELECT
-			q.question_idx questionIdx
-			, q.question_title questionTitle  
-			, e.example_idx exampleIdx 
+			q.question_no questionNo
+			, q.question_idx questionIdx
+			, q.question_title questionTitle
+			, e.example_idx exampleIdx
 			, e.example_title exampleTitle
-		FROM question q INNER JOIN	example e ON q.question_no = e.question_no
-		WHERE q.test_no= #{testNo}     
+			, e.example_ox exampleOx
+		FROM question q
+		INNER JOIN example e ON e.question_no = q.question_no
+		WHERE q.test_no = #{testNo}
+		ORDER BY q.question_idx ASC, e.example_idx ASC	
 	</select>	
+	<!-- 시험 문제리스트 출력 -->
+	<select id="selectQuestionList"
+		resultType="goodee.gdj58.online.vo.Question"
+		parameterType="int">
+			SELECT
+				question_no questionNo
+				, question_idx questionIdx
+				, question_title questionTitle
+			FROM question
+			WHERE test_no = #{testNo}
+			ORDER BY question_idx ASC
+	</select>
+	
+	<!-- testNo에 따른 시험지 상세출력 -->
+	<select id="testOne"
+		resultType="goodee.gdj58.online.vo.Test"
+		parameterType="int">
+		SELECT
+			test_no testNo
+			, test_title testTitle
+			, test_date testDate
+		FROM test
+		WHERE test_no = #{testNo}
+	</select>
+	<!-- 마지막문제번호 -->
+	<select id="lastQuestion"
+		resultType="int">
+		SELECT
+			question_no questionNo
+		FROM question
+		ORDER BY question_no DESC
+		LIMIT 0,1
+	</select>
 		
 	<select id = "cntTest"
 		resultType="int"

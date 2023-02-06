@@ -18,15 +18,28 @@ public class TestService {
 	@Autowired
 	private TestMapper testMapper;
 	
-	
+	// 문제 출력
+	public List<Map<String,Object>> getExampleList(int testNo) {
+		return testMapper.seletExampleList(testNo);
+	}
+	// 시험 상세보기
+	public Test testOne(int testNo) {
+		return testMapper.testOne(testNo);
+	}
+	// 마지막문제
+	public int getLastQuestion() {
+		return testMapper.lastQuestion();
+	}
+	 
 	public List<Map<String, Object>> getQuestionOne(int testNo){
 		return testMapper.selectQuestionOne(testNo);
 	}		
-
+	
 	public double cntTest(String searchWord) {
 		return testMapper.cntTest(searchWord);
 	}
 	
+	// 시험리스트
 	public List<Test> getTestList(int currentPage, int rowPerPage, String searchWord){
 		int beginRow = (currentPage-1)*rowPerPage;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
