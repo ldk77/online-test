@@ -15,14 +15,78 @@ import org.springframework.web.bind.annotation.RequestParam;
 import goodee.gdj58.online.service.IdService;
 import goodee.gdj58.online.service.TeacherService;
 import goodee.gdj58.online.vo.Employee;
+import goodee.gdj58.online.vo.Example;
+import goodee.gdj58.online.vo.Question;
 import goodee.gdj58.online.vo.Student;
 import goodee.gdj58.online.vo.Teacher;
+import goodee.gdj58.online.vo.Test;
 
 
 @Controller
 public class TeacherController {
 	@Autowired TeacherService teacherService;
 	@Autowired IdService idService;
+	
+	// 보기 입력
+	public String addExample() {
+		return "teacher/addExample";
+	}
+	@PostMapping("/teacher/addExample")
+	public String addExample(Model model,Example example) {	
+		int row = teacherService.addExample(example);
+		// row == 1 이면 입력성공
+		return "redirect:/test/testList"; 
+	}
+	// 질문지 입력
+	@GetMapping("teacher/addQuetion")
+	public String addQuetion() {
+		return "teacher/addQuetion";
+	}
+	@PostMapping("/teacher/addQuetion")
+	public String addQuetion(Model model,Question question) {	
+		int row = teacherService.addQuestion(question);
+		// row == 1 이면 입력성공
+		return "redirect:/test/testList"; 
+	}
+	
+	// 시험수정 폼
+	@GetMapping("/teacher/modifyTest")
+	public String modifyTest(Model model
+							,@RequestParam(value="testNo",required = true) int testNo
+							, @RequestParam(value="testTitle",required = true) String testTitle
+							, @RequestParam(value="testDate",required = true) String testDate) {
+		model.addAttribute("testNo", testNo);
+		model.addAttribute("testTitle", testTitle);
+		model.addAttribute("testDate", testDate);
+		return "teacher/modifyTest";
+	}
+	// pw수정 액션 
+	@PostMapping("/teacher/modifyTest")
+	public String modifyTest( @RequestParam(value="testNo",required = true) int testNo
+								, @RequestParam(value="testTitle",required = true) String testTitle
+								, @RequestParam(value="testDate",required = true) String testDate) {
+		
+		teacherService.updateTest(testNo, testTitle, testDate);		
+		return "redirect:/test/testList";
+	}
+	
+	// 시험지 입력
+	@GetMapping("teacher/addTest")
+	public String addTest() {
+		return "teacher/addTest";
+	}
+	@PostMapping("/teacher/addTest")
+	public String addTest(Model model,Test test) {	
+		int row = teacherService.addTest(test);
+		// row == 1 이면 입력성공
+		return "redirect:/test/testList"; 
+	}
+	
+	// student 홈 
+	@GetMapping("/teacher/teacherOne")
+	public String StudentOne() {
+		return "teacher/teacherOne";
+	}
 	
 	// pw수정 폼
 	@GetMapping("/teacher/modifyTeacherPw")
@@ -45,20 +109,13 @@ public class TeacherController {
 	@GetMapping("/loginTeacher")
 	public String loginTeacher(HttpSession session) {
 		//이미 로그인 중이라면 redirect:/employee/empList
-		Teacher loginTeacher = (Teacher)session.getAttribute("loginTeacher");
-		if(loginTeacher != null) {
-			return "redirect:/teacher/teacherList";
-		}
 		return "teacher/loginTeacher";
 	}
 	@PostMapping("/loginTeacher")
 	public String loginTeacher(HttpSession session, Teacher teacher) {
 		Teacher resultTeacher = teacherService.login(teacher);
-		if(resultTeacher == null) { //로그인 실패
-			return "redirect:/teacher/loginTeacher";
-		} 
 		session.setAttribute("loginTeacher", resultTeacher);
-		return "redirect:/teacher/modifyTeacherPw";
+		return "redirect:/teacher/teacherOne";
 	}
 	
 	@GetMapping("/teacher/logout")

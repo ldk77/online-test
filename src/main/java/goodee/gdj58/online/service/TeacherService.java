@@ -10,7 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import goodee.gdj58.online.mapper.TeacherMapper;
+import goodee.gdj58.online.vo.Example;
+import goodee.gdj58.online.vo.Question;
 import goodee.gdj58.online.vo.Teacher;
+import goodee.gdj58.online.vo.Test;
 
 
 @Service
@@ -18,6 +21,26 @@ import goodee.gdj58.online.vo.Teacher;
 public class TeacherService {
 	@Autowired
 	private TeacherMapper teacherMapper;
+	
+	public int addExample(Example example) {
+		return teacherMapper.insertExample(example);
+	}
+	
+	public int addQuestion(Question question){
+		return teacherMapper.insertQuestion(question);
+	}
+	
+	public int updateTest(int testNo, String testTitle, String testDate) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("testNo", testNo);
+		paramMap.put("testTitle", testTitle);
+		paramMap.put("testDate", testDate);
+		return teacherMapper.updateTest(paramMap);
+	}
+	
+	public int addTest(Test test) {
+		return teacherMapper.insertTest(test);
+	}
 	
 	public int updateTeacherPw(int teacherNo, String oldPw, String newPw) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();

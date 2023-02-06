@@ -24,6 +24,12 @@ public class StudentController {
 	@Autowired StudentService studentService;
 	@Autowired IdService idService;
 	
+	// student 홈 
+	@GetMapping("/student/studentOne")
+	public String StudentOne() {
+		return "student/studentOne";
+	}
+	
 	// pw수정 폼
 	@GetMapping("/student/modifyStudentPw")
 	public String modifyStudentPw(HttpSession session) {
@@ -53,7 +59,7 @@ public class StudentController {
 		Student resultStudent = studentService.login(student);
 		
 		session.setAttribute("loginStudent", resultStudent);
-		return "redirect:/student/modifyStudentPw";
+		return "redirect:/student/studentOne";
 	}
 	
 	@GetMapping("/student/logout")
