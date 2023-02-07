@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import goodee.gdj58.online.mapper.TeacherMapper;
+
 import goodee.gdj58.online.mapper.TestMapper;
+import goodee.gdj58.online.vo.Example;
+import goodee.gdj58.online.vo.Question;
 import goodee.gdj58.online.vo.Test;
 
 @Service
@@ -17,6 +19,16 @@ import goodee.gdj58.online.vo.Test;
 public class TestService {
 	@Autowired
 	private TestMapper testMapper;
+	
+	//질문해당 보기출력
+	public List<Example> getExList(int questionNo){
+		return testMapper.selectExList(questionNo);
+	}
+	
+	// 질문 출력
+	public List<Question> getQuestionList(int testNo){
+		return testMapper.selectQuestionList(testNo);
+	}
 	
 	// 문제 출력
 	public List<Map<String,Object>> getExampleList(int testNo) {

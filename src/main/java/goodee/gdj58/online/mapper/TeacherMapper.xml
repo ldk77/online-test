@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="goodee.gdj58.online.mapper.TeacherMapper">
+	<!-- 문제지수정 -->
+	<update id="updateQuestion"
+		parameterType="java.util.Map">
+		UPDATE question
+		SET question_title = #{questionTitle}, question_idx = #{questionIdx}
+		WHERE question_no = #{questionNo}
+	</update>
+	
+	
 	
 	<!-- 보기입력 -->
 	<insert id="insertExample" parameterType="goodee.gdj58.online.vo.Example">

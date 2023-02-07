@@ -12,11 +12,11 @@ import goodee.gdj58.online.vo.Question;
 import goodee.gdj58.online.vo.Test;
 
 @Mapper
-public interface TestMapper {
-	ArrayList<Question> selectQuestionList(int testNo);
+public interface TestMapper {	
 	List<Map<String, Object>> selectQuestionOne(int testNo);	
-	List<Map<String, Object>> seletExampleList(int testNo);
-	List<Question> seletQuestionList(Map<String, Object> paramMap);
+	List<Map<String, Object>> seletExampleList(int tetNo);
+	List<Question> selectQuestionList(int testNo);
+	List<Example> selectExList(int questionNo);
 	int cntTest (String searchWord);
 	List<Test> selectTestList(Map<String, Object> paramMap);
 	Test testOne(int testNo);

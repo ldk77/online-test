@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import goodee.gdj58.online.service.IdService;
 import goodee.gdj58.online.service.TeacherService;
+import goodee.gdj58.online.service.TestService;
 import goodee.gdj58.online.vo.Employee;
 import goodee.gdj58.online.vo.Example;
 import goodee.gdj58.online.vo.Question;
@@ -26,27 +27,43 @@ import goodee.gdj58.online.vo.Test;
 public class TeacherController {
 	@Autowired TeacherService teacherService;
 	@Autowired IdService idService;
+	@Autowired TestService testService;
+	
+	//보기 수정 
+	
+	//질문지 수정
 	
 	// 보기 입력
-	public String addExample() {
+	@GetMapping("/teacher/addExample")
+	public String addExample(Model model
+			,@RequestParam(value="questionNo",required = true) int questionNo) {
+		List<Example> list = testService.getExList(questionNo);
+		model.addAttribute("list", list);
+		model.addAttribute("questionNo", questionNo);
+		
 		return "teacher/addExample";
 	}
 	@PostMapping("/teacher/addExample")
-	public String addExample(Model model,Example example) {	
+	public String addExample(Model model,Example example,@RequestParam(value="questionNo",required = true) int questionNo) {	
 		int row = teacherService.addExample(example);
 		// row == 1 이면 입력성공
-		return "redirect:/test/testList"; 
+		return "redirect:/teacher/addExample?questionNo="+questionNo; 
 	}
 	// 질문지 입력
-	@GetMapping("teacher/addQuetion")
-	public String addQuetion() {
-		return "teacher/addQuetion";
+	@GetMapping("teacher/addQuestion")
+	public String addQuestion(Model model
+					,@RequestParam(value="testNo",required = true) int testNo) {
+		List<Question> list = testService.getQuestionList(testNo);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("testNo", testNo);
+		return "teacher/addQuestion";
 	}
-	@PostMapping("/teacher/addQuetion")
-	public String addQuetion(Model model,Question question) {	
+	@PostMapping("/teacher/addQuestion")
+	public String addQuestion(Model model,Question question,@RequestParam(value="testNo",required = true) int testNo) {	
 		int row = teacherService.addQuestion(question);
 		// row == 1 이면 입력성공
-		return "redirect:/test/testList"; 
+		return "redirect:/teacher/addQuestion?testNo="+testNo; 
 	}
 	
 	// 시험수정 폼

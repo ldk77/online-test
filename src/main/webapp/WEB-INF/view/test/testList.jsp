@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>   
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,13 +22,17 @@
 		<tr>			
 			<th>testTitle</th>
 			<th>testDate</th>
-			<th>수정/응시</th>			
+			<th>수정/응시</th>	
+			<th>문제등록</th>		
 		</tr>
 		<c:forEach var="t" items="${list}">
 			<tr>
 				<td><a href="${pageContext.request.contextPath}/test/testOne?testNo=${t.testNo}">${t.testTitle}</a></td>
 				<td>${t.testDate}</td>
-				<td><a href="${pageContext.request.contextPath}/teacher/modifyTest?testNo=${t.testNo}&testTitle=${t.testTitle}&testDate=${t.testDate}">수정</a></td>				
+				<td><a href="${pageContext.request.contextPath}/teacher/modifyTest?testNo=${t.testNo}&testTitle=${t.testTitle}&testDate=${t.testDate}">수정</a>
+					/ <a href="${pageContext.request.contextPath}/">응시</a>
+				</td>
+				<td><a href="${pageContext.request.contextPath}/teacher/addQuestion?testNo=${t.testNo}">등록</a></td>		
 			</tr>
 		</c:forEach>
 	</table>

@@ -9,8 +9,8 @@
 
 </head>
 <body>
-	<h1>${thisTest.testTitle}</h1>
-	<p>${thisTest.testDate}</p>
+	<h1>${thisTest.testNo}회차 ${thisTest.testTitle}</h1>
+	<p>시험일자 : ${thisTest.testDate}</p>
 	<hr>
 	<div>
 		<c:forEach var="q" items="${list}">

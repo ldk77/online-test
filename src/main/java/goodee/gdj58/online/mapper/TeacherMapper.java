@@ -12,6 +12,8 @@ import goodee.gdj58.online.vo.Test;
 
 @Mapper
 public interface TeacherMapper {
+	int updateExample(Map<String,Object> paramMap);
+	int updateQuestion(Map<String,Object> paramMap);
 	int insertExample (Example example);
 	int insertQuestion(Question question);
 	int updateTest(Map<String, Object> paramMap);
