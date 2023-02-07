@@ -9,7 +9,13 @@
 		WHERE question_no = #{questionNo}
 	</update>
 	
-	
+	<!-- 보기 수정 -->
+	<update id="updateExample"
+		parameterType="java.util.Map">
+		UPDATE example
+		SET example_title = #{exampleTitle}, example_idx = #{exampleIdx}
+		WHERE example_no = #{exampleNo}
+	</update>
 	
 	<!-- 보기입력 -->
 	<insert id="insertExample" parameterType="goodee.gdj58.online.vo.Example">

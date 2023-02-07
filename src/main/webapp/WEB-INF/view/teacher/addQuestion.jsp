@@ -17,7 +17,7 @@
 			</tr>
 			<tr>
 				<td>questionIdx</td>
-				<td><input type="number" name="questionIdx" min="1" max="20"></td>
+				<td><input type="number" name="questionIdx" min="1" max="10"></td>
 			</tr>
 			<tr>
 				<td>questionTitle}</td>
@@ -42,7 +42,7 @@
 					<a href="${pageContext.request.contextPath}/teacher/addExample?questionNo=${q.questionNo}">${q.questionTitle}</a>
 				</td>
 				<td>
-					<a href="${pageContext.request.contextPath}/teacher/modifyQuestion?questionNo=${q.questionNo}&questionTitle=${q.questionTitle}&questionIdx=${q.questionIdx}">수정</a>
+					<a href="${pageContext.request.contextPath}/teacher/modifyQuestion?testNo=${testNo}&questionNo=${q.questionNo}&questionTitle=${q.questionTitle}&questionIdx=${q.questionIdx}">수정</a>
 				</td>		
 			</tr>
 		</c:forEach>

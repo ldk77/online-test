@@ -30,9 +30,47 @@ public class TeacherController {
 	@Autowired TestService testService;
 	
 	//보기 수정 
-	
+	@GetMapping("/teacher/modifyExample")
+	public String modifyExample(Model model
+							,@RequestParam(value="exampleNo",required = true) int exampleNo
+							, @RequestParam(value="exampleTitle",required = true) String exampleTitle
+							, @RequestParam(value="exampleIdx",required = true) int exampleIdx) {
+		model.addAttribute("exampleNo", exampleNo);
+		model.addAttribute("exampleTitle", exampleTitle);
+		model.addAttribute("exampleIdx", exampleIdx);
+		return "teacher/modifyExample";
+	}
+	@PostMapping("/teacher/modifyExample")
+	public String modifyExample( @RequestParam(value="exampleNo",required = true) int exampleNo
+							, @RequestParam(value="exampleTitle",required = true) String exampleTitle
+							, @RequestParam(value="exampleIdx",required = true) int exampleIdx) {
+		
+		teacherService.updateExample(exampleNo, exampleTitle, exampleIdx);	
+		return "redirect:/test/testList";
+	}
 	//질문지 수정
-	
+	@GetMapping("/teacher/modifyQuestion")
+	public String modifyQuestion(Model model
+							
+							,@RequestParam(value="questionNo",required = true) int questionNo
+							, @RequestParam(value="questionTitle",required = true) String questionTitle
+							, @RequestParam(value="questionIdx",required = true) int questionIdx) {
+		
+		model.addAttribute("questionNo", questionNo);
+		model.addAttribute("questionTitle", questionTitle);
+		model.addAttribute("questionIdx", questionIdx);
+		return "teacher/modifyQuestion";
+	}
+	@PostMapping("/teacher/modifyQuestion")
+	public String modifyQuestion(
+						 
+							 @RequestParam(value="questionNo",required = true) int questionNo
+							, @RequestParam(value="questionTitle",required = true) String questionTitle
+							, @RequestParam(value="questionIdx",required = true) int questionIdx) {
+		
+		teacherService.updateQuestion(questionNo, questionTitle, questionIdx);	
+		return "redirect:/test/testList";
+	}
 	// 보기 입력
 	@GetMapping("/teacher/addExample")
 	public String addExample(Model model
@@ -66,7 +104,7 @@ public class TeacherController {
 		return "redirect:/teacher/addQuestion?testNo="+testNo; 
 	}
 	
-	// 시험수정 폼
+	// 시험수정 
 	@GetMapping("/teacher/modifyTest")
 	public String modifyTest(Model model
 							,@RequestParam(value="testNo",required = true) int testNo
@@ -77,7 +115,6 @@ public class TeacherController {
 		model.addAttribute("testDate", testDate);
 		return "teacher/modifyTest";
 	}
-	// pw수정 액션 
 	@PostMapping("/teacher/modifyTest")
 	public String modifyTest( @RequestParam(value="testNo",required = true) int testNo
 								, @RequestParam(value="testTitle",required = true) String testTitle

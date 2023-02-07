@@ -22,6 +22,22 @@ public class TeacherService {
 	@Autowired
 	private TeacherMapper teacherMapper;
 	
+	public int updateExample(int exampleNo, String exampleTitle, int exampleIdx) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("exampleNo", exampleNo); 
+		paramMap.put("exampleTitle", exampleTitle);
+		paramMap.put("exampleIdx", exampleIdx);
+		return teacherMapper.updateExample(paramMap);
+	} 
+	
+	public int updateQuestion(int questionNo, String questionTitle, int questionIdx) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("questionNo", questionNo);
+		paramMap.put("questionTitle",questionTitle);
+		paramMap.put("questionIdx", questionIdx);
+		return teacherMapper.updateQuestion(paramMap);
+	}
+	
 	public int addExample(Example example) {
 		return teacherMapper.insertExample(example);
 	}
