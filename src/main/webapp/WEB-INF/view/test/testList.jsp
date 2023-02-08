@@ -22,15 +22,16 @@
 		<tr>			
 			<th>testTitle</th>
 			<th>testDate</th>
-			<th>수정/응시</th>	
+			<th>수정/응시/보기</th>	
 			<th>문제등록</th>		
 		</tr>
 		<c:forEach var="t" items="${list}">
 			<tr>
-				<td><a href="${pageContext.request.contextPath}/test/testOne?testNo=${t.testNo}">${t.testTitle}</a></td>
+				<td>${t.testTitle}</td>
 				<td>${t.testDate}</td>
 				<td><a href="${pageContext.request.contextPath}/teacher/modifyTest?testNo=${t.testNo}&testTitle=${t.testTitle}&testDate=${t.testDate}">수정</a>
-					/ <a href="${pageContext.request.contextPath}/">응시</a>
+					/ <a href="${pageContext.request.contextPath}/student/addPaper?testNo=${t.testNo}">응시</a>
+					/ <a href="${pageContext.request.contextPath}/test/testOne?testNo=${t.testNo}">보기</a>
 				</td>
 				<td><a href="${pageContext.request.contextPath}/teacher/addQuestion?testNo=${t.testNo}">등록</a></td>		
 			</tr>

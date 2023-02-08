@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import goodee.gdj58.online.mapper.StudentMapper;
+import goodee.gdj58.online.vo.Paper;
 import goodee.gdj58.online.vo.Student;
 
 
@@ -28,6 +29,20 @@ public class StudentService {
 		paramMap.put("oldPw", oldPw);
 		paramMap.put("newPw", newPw);
 		return studentMapper.updateStudentPw(paramMap);
+	}
+	
+	// 테스트별 정답개수
+	public int answerCnt(int testNo) {
+		return studentMapper.answerCnt(testNo);
+	}
+	
+	// 답안과 정답비교용
+	public int getQuestionOx(int questionNo) {
+		return studentMapper.questionOx(questionNo);
+	}
+	// 답안등록
+	public int addPaper(Paper paper) {
+		return studentMapper.insertPaper(paper);
 	}
 	
 	public Student login(Student student) {
