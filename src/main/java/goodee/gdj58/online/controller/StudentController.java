@@ -140,7 +140,7 @@ public class StudentController {
 	//로그인 
 	@GetMapping("/loginStudent")
 	public String loginStudent() {
-		return "student/loginStudent";
+		return "login";
 	}
 	@PostMapping("/loginStudent")
 	public String loginStudent(HttpSession session, Student student) {
@@ -150,11 +150,7 @@ public class StudentController {
 		return "redirect:/student/studentOne";
 	}
 	
-	@GetMapping("/student/logout")
-	public String logout(HttpSession session) {
-		session.invalidate();
-		return "redirect:/student/loginStudent";
-	}
+
 	
 	//삭제 
 	@GetMapping("employee/removeStudent")

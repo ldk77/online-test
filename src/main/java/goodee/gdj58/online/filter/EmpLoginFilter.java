@@ -28,7 +28,7 @@ public class EmpLoginFilter extends HttpFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest)request;
 		HttpSession session = req.getSession(); 
 		if(session.getAttribute("loginEmp") == null) {
-			((HttpServletResponse) response).sendRedirect(req.getContextPath()+"/loginEmp");
+			((HttpServletResponse) response).sendRedirect(req.getContextPath()+"/login");
 			return;
 		}
 	} else {

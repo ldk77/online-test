@@ -27,7 +27,7 @@ public class StudentLoginFilter extends HttpFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest)request;
 		HttpSession session = req.getSession(); 
 		if(session.getAttribute("loginStudent") == null) {
-			((HttpServletResponse) response).sendRedirect(req.getContextPath()+"/loginStudent");
+			((HttpServletResponse) response).sendRedirect(req.getContextPath()+"/login");
 			return;
 		}
 	} else {

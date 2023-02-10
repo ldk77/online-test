@@ -163,7 +163,7 @@ public class TeacherController {
 	@GetMapping("/loginTeacher")
 	public String loginTeacher(HttpSession session) {
 		//이미 로그인 중이라면 redirect:/employee/empList
-		return "teacher/loginTeacher";
+		return "login";
 	}
 	@PostMapping("/loginTeacher")
 	public String loginTeacher(HttpSession session, Teacher teacher) {
@@ -172,11 +172,7 @@ public class TeacherController {
 		return "redirect:/teacher/teacherOne";
 	}
 	
-	@GetMapping("/teacher/logout")
-	public String logout(HttpSession session) {
-		session.invalidate();
-		return "redirect:/teacher/loginTeacher";
-	}
+
 	
 	//삭제 
 	@GetMapping("employee/removeTeacher")

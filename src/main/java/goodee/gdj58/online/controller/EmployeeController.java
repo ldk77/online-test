@@ -22,6 +22,20 @@ public class EmployeeController {
 	@Autowired EmployeeService employeeService;
 	@Autowired IdService idService;
 	
+
+	//로그인
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
+	@PostMapping("/login")
+	public String login(Model model,@RequestParam(value = "user", defaultValue = "employee") String user) {
+		
+		model.addAttribute("user", user);		
+		return "login";
+	}
+	
+	
 	// pw수정 폼
 	@GetMapping("/employee/modifyEmpPw")
 	public String modifyEmpPw(HttpSession session) {
@@ -44,7 +58,7 @@ public class EmployeeController {
 	//로그인 폼
 	@GetMapping("/loginEmp")
 	public String loginEmp() {
-		return "employee/loginEmp";
+		return "login";
 	}
 	//로그인 액션
 	@PostMapping("/loginEmp")
@@ -54,11 +68,11 @@ public class EmployeeController {
 		session.setAttribute("loginEmp", resultEmp);
 		return "redirect:/employee/empList";
 	}
-	
-	@GetMapping("/employee/logout")
+	//로그아웃
+	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();
-		return "redirect:/employee/loginEmp";
+		return "redirect:/login";
 	}
 	
 	//삭제 

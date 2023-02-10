@@ -17,6 +17,13 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class TestController {
 	@Autowired TestService testService;
+	
+	//css 출력
+	@GetMapping("/test/index")
+	public String index() {
+		return "/test/index";
+	}
+	
 	// Test 리스트 출력 
 	@GetMapping("/test/testOne")
 	public String testOne(Model model

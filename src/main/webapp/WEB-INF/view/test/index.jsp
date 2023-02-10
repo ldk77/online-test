@@ -24,7 +24,7 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/student/modifyStudentPw">비밀번호수정</a></li>                     
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">로그아웃</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/student/logout">로그아웃</a></li>
                     </ul>
                 </li>
             </ul>
@@ -58,27 +58,59 @@
                         <h1 class="mt-4">환영합니다</h1>
                         
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">${loginStudent.studentName}님이 접속 하였습니다.</li>
+                            <li class="breadcrumb-item active">님이 접속 하였습니다.</li>
                         </ol>
                         <div class="row">
-                            <div class="col-xl-6">
+                            <div class="col-xl-12">
                                 <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-area me-1"></i>
-                                        Area Chart Example
+                                    <div class="card-header">                                      
+                                     	 test List
                                     </div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                                    <div class="card-body">  
+                                    <div style="float: right; padding-bottom: 10px;"> 
+                                    <c:if test="${loginTeacher != null}">                               
+										<a href="${pageContext.request.contextPath}/teacher/addTest">시험등록</a>
+									</c:if>		
+											<form method="get" action="${pageContext.request.contextPath}/test/testList">
+											<input type="text" name="searchWord">
+											<button type="submit">시험검색</button>
+									</div>	
+										</form>
+										<table class = "table table-hover w-100 rounded" style="table-layout: auto; width: 100%; table-layout: fixed;">
+											<tr>			
+												<th>testTitle</th>
+												<th>testDate</th>
+												<th>수정/응시/보기</th>	
+												<th>문제등록</th>		
+											</tr>
+											<c:forEach var="t" items="${list}">
+												<tr>
+													<td>${t.testTitle}</td>
+													<td>${t.testDate}</td>
+													<td><a href="${pageContext.request.contextPath}/teacher/modifyTest?testNo=${t.testNo}&testTitle=${t.testTitle}&testDate=${t.testDate}">수정</a>
+														/ <a href="${pageContext.request.contextPath}/student/addPaper?testNo=${t.testNo}">응시</a>
+														/ <a href="${pageContext.request.contextPath}/test/testOne?testNo=${t.testNo}">보기</a>
+													</td>
+													<td><a href="${pageContext.request.contextPath}/teacher/addQuestion?testNo=${t.testNo}">등록</a></td>		
+												</tr>
+											</c:forEach>
+										</table>
+										<div>
+											<a href="${pageContext.request.contextPath}/test/testList?currentPage=1&searchWord=${searchWord}">처음으로</a>
+											<c:if test="${currentPage > 1}">
+											<a href="${pageContext.request.contextPath}/test/testList?currentPage=${currentPage-1}&searchWord=${searchWord}">이전</a>
+											</c:if>
+											<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
+											<a href="${pageContext.request.contextPath}/test/testList?currentPage=${i}&searchWord=${searchWord}">${i}</a>
+											</c:forEach>
+											<c:if test="${currentPage < lastPage}">
+											<a href="${pageContext.request.contextPath}/test/testList?currentPage=${currentPage+1}&searchWord=${searchWord}">다음</a>
+											</c:if>
+											<a href="${pageContext.request.contextPath}/test/testList?currentPage=${lastPage}&searchWord=${searchWord}">끝으로</a>
+										</div>
+                                    <canvas id="myAreaChart" width="100%" height="40"></canvas></div>
                                 </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-bar me-1"></i>
-                                        Bar Chart Example
-                                    </div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-                                </div>
-                            </div>
+                            </div>                  
                         </div>
                         <div class="card mb-4">
     
