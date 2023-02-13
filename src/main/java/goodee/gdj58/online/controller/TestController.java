@@ -19,9 +19,9 @@ public class TestController {
 	@Autowired TestService testService;
 	
 	//css 출력
-	@GetMapping("/test/index")
+	@GetMapping("/test/new")
 	public String index() {
-		return "/test/index";
+		return "/test/new";
 	}
 	
 	// Test 리스트 출력 

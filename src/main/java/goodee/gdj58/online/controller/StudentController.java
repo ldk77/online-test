@@ -112,11 +112,6 @@ public class StudentController {
 		return "student/studentOne";
 	}
 	
-	// student 홈 
-	@GetMapping("/student/studentOne")
-	public String StudentOne() {
-		return "student/studentOne";
-	}
 	
 	// pw수정 폼
 	@GetMapping("/student/modifyStudentPw")
@@ -147,7 +142,7 @@ public class StudentController {
 		Student resultStudent = studentService.login(student);
 		
 		session.setAttribute("loginStudent", resultStudent);
-		return "redirect:/student/studentOne";
+		return "redirect:/student/studentTestList";
 	}
 	
 

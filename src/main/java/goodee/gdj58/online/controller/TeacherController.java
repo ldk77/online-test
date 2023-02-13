@@ -137,8 +137,33 @@ public class TeacherController {
 	}
 	
 	// student 홈 
-	@GetMapping("/teacher/teacherOne")
-	public String StudentOne() {
+	@GetMapping("/teacher/teacherOne")		
+		public String teacherOne(Model model
+				, @RequestParam(value="currentPage", defaultValue = "1") int currentPage
+				, @RequestParam(value="rowPerPage", defaultValue = "10") int rowPerPage
+				, @RequestParam(value="searchWord", defaultValue = "") String searchWord) {
+				// int currentPage = request.getParameter("currentPage");
+			int lastPage = (int)Math.ceil((double)testService.cntTest(searchWord)/(double)rowPerPage);
+			int startPage = (currentPage/rowPerPage)*10 +1;
+			int endPage = (currentPage/rowPerPage)*10 + 10;
+			if(endPage > lastPage) {
+				endPage = lastPage;
+			}
+			if(lastPage<1) {
+				lastPage= currentPage;
+			}
+						
+			List<Test> list = testService.getTestList(currentPage, rowPerPage, searchWord);
+			model.addAttribute("list", list);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("searchWord", searchWord);
+			model.addAttribute("lastPage", lastPage);
+			
+			model.addAttribute("startPage", startPage);
+			model.addAttribute("endPage", endPage);			
+			
+		
+		
 		return "teacher/teacherOne";
 	}
 	
