@@ -12,7 +12,7 @@
     Soft UI Dashboard by Creative Tim
   </title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 <link rel="canonical" href="https://www.creative-tim.com/product/soft-ui-dashboard" />
 
 <meta name="keywords" content="creative tim, html dashboard, html css dashboard, web dashboard, bootstrap 5 dashboard, bootstrap 5, css3 dashboard, bootstrap 5 admin, Soft UI Dashboard bootstrap 5 dashboard, frontend, responsive bootstrap 5 dashboard, free dashboard, free admin dashboard, free bootstrap 5 admin dashboard">
@@ -42,6 +42,7 @@
 <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
 
 <link id="pagestyle" href="../assets/css/soft-ui-dashboard.min.css?v=1.0.7" rel="stylesheet" />
+
 
 <style>
     .async-hide {
@@ -260,31 +261,39 @@
                                     <div style="float: right; padding-bottom: 10px;"> 
                             	
 											
-									</div>					
-								
-										<form method="post" action="${pageContext.request.contextPath}/employee/addEmp">
+									</div>				
+										
+											<form method="post" action="${pageContext.request.contextPath}/employee/addEmp">
 											<table class="table align-items-center mb-0">
 																<tr>
 																	<th>empId</th>
 																</tr>
+																<tr>
+																	<td>
+																	<input type="text" class="form-control" id="id">
+																	<button type="button" class="btn btn-outline-primary btn-sm mb-0 me-3" id="ckBtn">중복체크</button>
+																	</td>
+																</tr>															
 																<tr>	
-																	<td><input type="text" name="empId"></td>
+																	<td>
+																	<input type="text" class="form-control" name="empId" id="empId" readonly="readonly" >																	
+																	</td>
 																</tr>
 																<tr>
 																	<th>empPw</th>
 																</tr>
 																<tr>	
-																	<td><input type="text" name="empPw"></td>
+																	<td><input type="text" class="form-control" id="empPw" name="empPw"></td>
 																</tr>
 																<tr>
 																	<th>empName</th>
 																</tr>
 																<tr>	
-																	<td><input type="text" name="empName"></td>
+																	<td><input type="text" class="form-control" id="empName" name="empName"></td>
 																</tr>													
 											</table>
 											<div align="center">
-											 <button type = "submit" class="btn bg-gradient-info w-100 mt-4 mb-0">추가</button>	</div>	
+											 <button type = "submit"  id="addBtn" class="btn bg-gradient-info w-100 mt-4 mb-0">추가</button>	</div>	
 										</form>																		
 										
                                     </div>                                    
@@ -301,6 +310,8 @@
 
 
 </div>
+
+
 </nav>
 
 </main>
@@ -495,4 +506,29 @@
 <script src="../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vaafb692b2aea4879b33c060e79fe94621666317369993" integrity="sha512-0ahDYl866UMhKuYcW078ScMalXqtFJggm7TmlUtp0UlD4eQk0Ixfnm5ykXKvGJNFjLMoortdseTfsRT8oCfgGA==" data-cf-beacon='{"rayId":"798b0ebefec419de","version":"2022.11.3","r":1,"token":"1b7cbb72744b40c580f8633c6b62637e","si":100}' crossorigin="anonymous"></script>
 </body>
+<script>
+	
+	// 아이디 유효성 검사 (중복확인 포함)
+	$('#ckBtn').click(function(){
+		$.ajax({
+			url:'idck'
+			, type:'get'
+			, data : {id:$('#id').val()}
+			, success:function(model){ // model : 'YES' / 'NO'
+				if(model=='YES') {
+					// 사용가능한 아이디
+					$('#empId').val($('#id').val());
+				} else {
+					// 사용중인 아이디
+					alert($('#id').val()+'는 사용중인 아이디입니다');
+				}
+			}
+		});
+	});		
+
+
+</script>
+
+
+
 </html>
